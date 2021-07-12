@@ -1,0 +1,27 @@
+{
+  "name": "rema-jugaadu",
+  "version": "1.0.0",
+  "description": "A hacked powerful certificate generation and management system.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paramsiddharth/rema-jugaadu.git"
+  },
+  "keywords": [
+    "certificate",
+    "management",
+    "generation",
+    "credential",
+    "jugaadu",
+    "hack"
+  ],
+  "author": "Param Siddharth <contact@paramsid.com> (http://www.paramsid.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/paramsiddharth/rema-jugaadu/issues"
+  },
+  "homepage": "https://github.com/paramsiddharth/rema-jugaadu#readme"
+}
