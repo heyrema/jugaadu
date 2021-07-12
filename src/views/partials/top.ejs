@@ -8,13 +8,13 @@
 	<link rel="stylesheet" href="../../modules/bootstrap/dist/css/bootstrap.min.css">
 	<link rel="stylesheet" href="../../modules/bootstrap-social/bootstrap-social.css">
 	<link rel="stylesheet" href="../../modules/font-awesome/css/font-awesome.min.css">
-	<link rel="stylesheet" href="../../modules/toastify-js/src/toastify.css">
 	<link rel="stylesheet" href="../../modules/css-spinners/dist/all.min.css">
 	<link rel="stylesheet" href="../../static/style.css">
 	<script defer src="../../modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script defer src="../../modules/jquery/dist/jquery.min.js"></script>
-	<script defer src="../../modules/downloadjs/download.min.js"></script>
-	<script defer src="../../modules/toastify-js/src/toastify.js"></script>
-	<script defer src="../../static/script.js"></script>
+	<script defer src="../../modules/toast-me/lib/toast-me.min.js"></script>
+	<% if (locals.useScript) { %>
+		<script defer src="../../static/script.js"></script>
+	<% } %>
 </head>
 <body>

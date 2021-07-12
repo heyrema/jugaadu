@@ -1,11 +1,13 @@
 $(async function() {
+	window.toast = window['toast-me'].default;
+
 	$('.visible-pre-completion').prop('hidden', true);
 	$('.visible-post-completion').prop('hidden', false);
 	
 	const handleSize = () => {
 		const cert = $('#certificate');
 		cert.css({
-			backgroundImage: `url('${cert.attr('data-src')}')`,
+			backgroundImage: `url('${certificate.PNG}')`,
 			backgroundSize: 'cover'
 		});
 		const height = cert.attr('data-height');
@@ -85,13 +87,8 @@ $(async function() {
 const downloadCert = async type => {
 	const msg = `Downloading ${type}...`;
 	console.log(msg);
-	Toastify({
-		text: msg,
-		duration: 2000,
-		gravity: 'top',
-		position: 'right',
-		backgroundColor: '#4C4C4C'
-	}).showToast();
-	const certFile = await fetch(certificate[type]);
-	download(await certFile.blob(), 'certificate.png', 'image/png');
-}
+	window.toast(msg, {
+		toastClass: 'bg-toast float-right',
+		duration: 2000
+	});
+};

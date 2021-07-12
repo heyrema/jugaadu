@@ -1,2 +1,4 @@
-build/
+build/*
 *.csv
+!build/certificate/
+dist/
