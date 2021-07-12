@@ -1,0 +1,25 @@
+* {
+	user-select: none;
+	margin: 0;
+}
+
+body {
+	min-height: 100vh;
+	background-color: #262626;
+}
+
+#title {
+	font-family: 'Times New Roman';
+}
+
+#links {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+footer {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: small;
+	color: #888;
+	padding-top: 25px;
+	padding-bottom: 25px;
+}

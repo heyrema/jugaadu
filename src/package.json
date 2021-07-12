@@ -1,27 +1,55 @@
 {
-  "name": "rema-jugaadu",
-  "version": "1.0.0",
-  "description": "A hacked powerful certificate generation and management system.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/paramsiddharth/rema-jugaadu.git"
-  },
-  "keywords": [
-    "certificate",
-    "management",
-    "generation",
-    "credential",
-    "jugaadu",
-    "hack"
-  ],
-  "author": "Param Siddharth <contact@paramsid.com> (http://www.paramsid.com/)",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/paramsiddharth/rema-jugaadu/issues"
-  },
-  "homepage": "https://github.com/paramsiddharth/rema-jugaadu#readme"
+	"name": "rema-jugaadu",
+	"version": "1.0.0",
+	"description": "A hacked powerful certificate generation and management system.",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js",
+		"serve": "nodemon -w . -i static -i views -e js,json,env server.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"bin": {
+		"jrema": "index.js",
+		"jugaadu-rema": "index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/paramsiddharth/rema-jugaadu.git"
+	},
+	"keywords": [
+		"certificate",
+		"management",
+		"generation",
+		"credential",
+		"jugaadu",
+		"hack"
+	],
+	"author": "Param Siddharth <contact@paramsid.com> (http://www.paramsid.com/)",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/paramsiddharth/rema-jugaadu/issues"
+	},
+	"homepage": "https://github.com/paramsiddharth/rema-jugaadu#readme",
+	"devDependencies": {
+		"connect-livereload": "^0.6.1",
+		"dotenv": "^10.0.0",
+		"express": "^4.17.1",
+		"express-minify": "^1.0.0",
+		"express-minify-html-2": "^1.0.1",
+		"livereload": "^0.9.3",
+		"nodemon": "^2.0.12"
+	},
+	"dependencies": {
+		"axios": "^0.21.1",
+		"bootstrap": "^5.0.2",
+		"bootstrap-social": "^5.1.1",
+		"css-spinners": "^1.0.1",
+		"downloadjs": "^1.4.7",
+		"easy-social-share-links": "^1.2.2",
+		"ejs": "^3.1.6",
+		"font-awesome": "^4.7.0",
+		"jquery": "^3.6.0",
+		"json5": "^2.2.0",
+		"toastify-js": "^1.11.0"
+	}
 }

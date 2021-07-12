@@ -1,0 +1,46 @@
+<%- include('partials/top') %>
+	<div class="container-fluid text-white">
+		<%- include('partials/header', { title: locals.title ?? 'Certificate' }) %>
+		<div class='visible-pre-completion row text-center mb-2'>
+			<div class='col-12'>
+				<div class='spin-skeleton light'></div>
+			</div>
+		</div>
+		<div hidden class="visible-post-completion row">
+			<div id='certificate-wrapper' class='col-12 col-md-6 offset-md-3 p-0 mb-3'>
+				<div id='certificate' class="d-block m-auto"
+					data-width="1000"
+					data-height="740"
+					data-src='<%= cert %>'>
+				</div>
+			</div>
+		</div>
+		<div hidden id='links' class='visible-post-completion row text-center'>
+			<div class='col-12 col-md-6 offset-md-3 mb-1'>
+				<button id='facebook' onclick='downloadCert("PNG");' class='btn btn-social-icon btn-facebook'>
+					<i class='fa fa-facebook'></i>
+				</button>
+				<button id='twitter' onclick='downloadCert("PNG");' class='btn btn-social-icon btn-twitter'>
+					<i class='fa fa-twitter'></i>
+				</button>
+				<button id='linkedin' onclick='downloadCert("PNG");' class='btn btn-social-icon btn-linkedin'>
+					<i class='fa fa-linkedin'></i>
+				</button>
+			</div>
+			<div class='col-12 col-md-6 offset-md-3'>
+				<button onclick='downloadCert("PNG");' class='btn btn-success'>
+					<i class='fa fa-arrow-down'></i> PNG
+				</button>
+				<button onclick='downloadCert("PDF");' class='btn btn-primary'>
+					<i class='fa fa-arrow-down'></i> PDF
+				</button>
+			</div>
+		</div>
+	</div>
+	<script>
+		var certificate = {
+			PNG: '<%= cert %>',
+			PDF: '<%= cert %>'
+		};
+	</script>
+<%- include('partials/bottom') %>
