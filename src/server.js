@@ -1,3 +1,7 @@
+/**
+ * Environment variables:
+ * 1. NO_MINIFY: Any non-zero value turns minification off
+ */
 require('dotenv').config();
 
 const path = require('path');
@@ -26,19 +30,22 @@ const app = express();
 
 app.set('view engine', 'ejs');
 app.use(connectLiveReload());
-app.use(expressMinify());
-app.use(expressMinifyHTML({
-    override: true,
-    exception_url: false,
-    htmlMinifier: {
-        removeComments: true,
-        collapseWhitespace: true,
-        collapseBooleanAttributes: true,
-        removeAttributeQuotes: true,
-        removeEmptyAttributes: true,
-        minifyJS: true
-    }
-}));
+
+if (!process.env.NO_MINIFY) {
+	app.use(expressMinify());
+	app.use(expressMinifyHTML({
+		override: true,
+		exception_url: false,
+		htmlMinifier: {
+			removeComments: true,
+			collapseWhitespace: true,
+			collapseBooleanAttributes: true,
+			removeAttributeQuotes: true,
+			removeEmptyAttributes: true,
+			minifyJS: true
+		}
+	}));
+}
 
 app.route([
 	'/certificate/:name',

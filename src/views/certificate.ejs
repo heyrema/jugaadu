@@ -17,15 +17,18 @@
 		</div>
 		<div hidden id='links' class='visible-post-completion row text-center'>
 			<div class='col-12 col-md-6 offset-md-3 mb-1'>
-				<button id='facebook' onclick='downloadCert("PNG");' class='btn btn-social-icon btn-facebook'>
+				<a href='#' target='_blank' id='email' class='btn btn-social-icon btn-vk'>
+					<i class='fa fa-envelope'></i>
+				</a>
+				<a href='#' target='_blank' id='facebook' class='btn btn-social-icon btn-facebook'>
 					<i class='fa fa-facebook'></i>
-				</button>
-				<button id='twitter' onclick='downloadCert("PNG");' class='btn btn-social-icon btn-twitter'>
+				</a>
+				<a href='#' target='_blank' id='twitter' class='btn btn-social-icon btn-twitter'>
 					<i class='fa fa-twitter'></i>
-				</button>
-				<button id='linkedin' onclick='downloadCert("PNG");' class='btn btn-social-icon btn-linkedin'>
+				</a>
+				<a href='#' target='_blank' id='linkedin' class='btn btn-social-icon btn-linkedin'>
 					<i class='fa fa-linkedin'></i>
-				</button>
+				</a>
 			</div>
 			<div class='col-12 col-md-6 offset-md-3'>
 				<button onclick='downloadCert("PNG");' class='btn btn-success'>
@@ -39,6 +42,7 @@
 	</div>
 	<script>
 		var certificate = {
+			title: '<%= locals.title ?? "Certificate" %>',
 			PNG: '<%= cert %>',
 			PDF: '<%= cert %>'
 		};
