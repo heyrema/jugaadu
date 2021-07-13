@@ -80,7 +80,7 @@ app.route([
 });
 
 app.use('/modules', express.static(path.join(__dirname, 'node_modules')));
-app.use('/static', express.static(path.join(__dirname, 'static')));
+app.use('/', express.static(path.join(__dirname, 'static')));
 app.use('/', express.static(path.join(__dirname, 'build')));
 
 const server = app.listen(PORT, () => console.log(`Jugaadu Rema Development Server running on port ${PORT}. 😎`));
