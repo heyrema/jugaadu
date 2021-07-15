@@ -1,7 +1,8 @@
 /**
  * Environment variables:
- * 1. NO_MINIFY: Any non-zero value turns minification off
- * 2. PORT: The port the development server runs on (default: 8081)
+ * NO_MINIFY: Any non-zero value turns minification off
+ * PORT: The port the development server runs on (default: 8081)
+ * BASE_ROUTE: The route on which the output is to be mounted, '/' by default.
  */
 require('dotenv').config();
 
@@ -17,6 +18,11 @@ const morgan = require('morgan');
 
 const PORT = process.env.PORT ?? 8081;
 const BUILD_DIR = path.join(__dirname, 'build');
+const BASE_ROUTE = process.env.BASE_ROUTE ?
+	(
+		process.env.BASE_ROUTE.endsWith('/') ? process.env.BASE_ROUTE : process.env.BASE_ROUTE + '/'
+	)
+	: '/';
 
 const liveReloadServer = liveReload.createServer({
 	extraExts: [
@@ -53,25 +59,32 @@ if (!process.env.NO_MINIFY) {
 	}));
 }
 
-app.route([
-	'/certificate/:name',
-	'/certificate/:name/index',
-	'/certificate/:name/index.html'
+const router = express.Router();
+
+router.route([
+	`/certificate/:uid`,
+	`/certificate/:uid/index`,
+	`/certificate/:uid/index.html`
 ])
 .get(async (req, res) => {
 	const CERT_DIR = path.join(BUILD_DIR, 'certificate');
 	await fs.ensureDir(CERT_DIR);
 
-	const { name } = req.params;
+	const { uid } = req.params;
 	
-	const DIR_IN_FOCUS = path.join(CERT_DIR, name);
+	const DIR_IN_FOCUS = path.join(CERT_DIR, uid);
 	if (!await fs.pathExists(DIR_IN_FOCUS)) {
-		return res.status(statusCode.NOT_FOUND).render('404');
+		return res.status(statusCode.NOT_FOUND).render('404', {
+			base: BASE_ROUTE
+		});
 	}
 	
 	try {
 		const info = await fs.readJSON(path.join(DIR_IN_FOCUS, 'certificate.json'));
-		return res.status(statusCode.OK).render('certificate', { info, name });
+		return res.status(statusCode.OK).render('certificate', {
+			info, uid,
+			base: BASE_ROUTE
+		});
 	} catch(e) {
 		console.log(e.message);
 		console.log(e.stack);
@@ -79,8 +92,10 @@ app.route([
 	}
 });
 
-app.use('/modules', express.static(path.join(__dirname, 'node_modules')));
-app.use('/', express.static(path.join(__dirname, 'static')));
-app.use('/', express.static(path.join(__dirname, 'build')));
+router.use(`/modules`, express.static(path.join(__dirname, 'node_modules')));
+router.use(`/`, express.static(path.join(__dirname, 'public')));
+router.use(`/`, express.static(path.join(__dirname, 'build')));
+
+app.use(BASE_ROUTE, router);
 
 const server = app.listen(PORT, () => console.log(`Jugaadu Rema Development Server running on port ${PORT}. 😎`));

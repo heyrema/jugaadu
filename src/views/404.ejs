@@ -1,9 +1,9 @@
-<%- include('partials/top', { title: 'Not Found - Rema' }) %>
+<%- include('partials/top', { title: 'Not Found - Rema', base: base }) %>
 <div class="container-fluid text-white">
 	<%- include('partials/header', { title: 'Invalid ID' }) %>
 	<div class="row text-center">
 		<div class="col-12">
-			<a href="../.." class="btn btn-secondary">Back to Home</a>
+			<a href="<%= base %>" class="btn btn-secondary">Back to Home</a>
 		</div>
 	</div>
 </div>

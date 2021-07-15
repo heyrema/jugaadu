@@ -1,11 +1,17 @@
+var certificate = {};
+
 $(async function() {
+	const cert = $('#certificate');
+	certificate.title = cert.attr('data-title');
+	certificate.PNG = cert.attr('data-src') + '.png';
+	certificate.PDF = cert.attr('data-src') + '.pdf';
+
 	window.toast = window['toast-me'].default;
 
 	$('.visible-pre-completion').prop('hidden', true);
 	$('.visible-post-completion').prop('hidden', false);
 	
 	const handleSize = () => {
-		const cert = $('#certificate');
 		cert.css({
 			backgroundImage: `url('${certificate.PNG}')`,
 			backgroundSize: 'cover'
@@ -19,7 +25,7 @@ $(async function() {
 				cert.css({
 					height: height,
 					width: width
-				})
+				});
 			else
 				cert.css({
 					width: computedWidth,
