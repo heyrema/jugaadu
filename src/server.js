@@ -75,7 +75,8 @@ router.route([
 	const DIR_IN_FOCUS = path.join(CERT_DIR, uid);
 	if (!await fs.pathExists(DIR_IN_FOCUS)) {
 		return res.status(statusCode.NOT_FOUND).render('404', {
-			base: BASE_ROUTE
+			base: BASE_ROUTE,
+			title: 'Invalid ID'
 		});
 	}
 	
@@ -92,9 +93,19 @@ router.route([
 	}
 });
 
+router.route('/')
+.get((req, res) => {
+	return res.status(statusCode.OK).render('index', {
+		base: BASE_ROUTE
+	});
+});
+
 router.use(`/modules`, express.static(path.join(__dirname, 'node_modules')));
 router.use(`/`, express.static(path.join(__dirname, 'public')));
 router.use(`/`, express.static(path.join(__dirname, 'build')));
+
+router.route('*')
+.all((req, res) => res.status(statusCode.NOT_FOUND).render('404', { base: BASE_ROUTE }));
 
 app.use(BASE_ROUTE, router);
 
