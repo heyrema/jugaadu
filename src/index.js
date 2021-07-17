@@ -62,7 +62,12 @@ if (require.main === module) {
 		.usage(`\
 Generates a deployable Jugaadu static build of Rema.
 
-Usage: jrema`)
+Usage: jrema <options>`)
+		.option('b', {
+			alias: 'base-route',
+			desc: 'The route on which the build will be mounted.',
+			default: '/'
+		})
 		.option('l', {
 			alias: 'list',
 			desc: 'A CSV file containing all records.',
@@ -78,6 +83,17 @@ Usage: jrema`)
 			desc: 'The exported Rema template file.',
 			default: 'template.json'
 		})
+		.option('d', {
+			alias: 'directory',
+			desc: 'Generate a webpage that lists all certificates.',
+			choices: [
+				'absent',
+				'visible',
+				'hidden'
+			],
+			default: 'absent',
+			type: 'string'
+		})
 		.option('s', {
 			alias: 'static-dir',
 			desc: 'Rema\'s static directory, needed by templates referencing resources by path.',
@@ -87,11 +103,6 @@ Usage: jrema`)
 			alias: 'build-dir',
 			desc: 'The output build directory.',
 			default: 'build'
-		})
-		.option('b', {
-			alias: 'base-route',
-			desc: 'The route on which the build will be mounted.',
-			default: '/'
 		})
 		.option('preview', {
 			desc: 'Previews the template.',
@@ -335,12 +346,13 @@ Usage: jrema`)
 		}
 
 		{
-			for (const file of [
+			const files = [
 				{
 					location: 'index.html',
 					template: 'index',
 					params: {
-						base: baseRoute
+						base: baseRoute,
+						directory: args.d === 'visible'
 					}
 				},
 				{
@@ -351,7 +363,19 @@ Usage: jrema`)
 						title: `Not Found`
 					}
 				}
-			]) {
+			];
+
+			if (args.d !== 'absent')
+				files.push({
+					location: 'directory/index.html',
+					template: 'directory',
+					params: {
+						base: baseRoute,
+						certificates: certList.filter(c => c?.error == null).map(c => c.uid)
+					}
+				});
+
+			for (const file of files) {
 				const html = await ejs.renderFile(path.join(__dirname, `views/${file.template}.ejs`), file.params);
 				fs.outputFileSync(path.join(buildDir, file.location), html);
 			}

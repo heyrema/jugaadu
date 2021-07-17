@@ -1,0 +1,25 @@
+<%- include('partials/top', { title: locals.title ?? 'Directory', base: base }) %>
+<div class="container-fluid text-white">
+	<%- include('partials/header', { title: locals.title ?? 'Rema' }) %>
+	<div class="row text-center">
+		<div class="col-12 col-md-6 offset-md-3">
+			<table id='credList' class='table'>
+				<thead>
+					<tr>
+						<th scope="col">Credential ID</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% for (const cert of locals.certificates ?? []) { %>
+					<tr>
+						<td title='<%= cert %>'>
+							<a class='cred-entry' href='<%= base %>certificate/<%= cert %>'><%= cert %></a>
+						</td>
+					</tr>
+					<% } %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<%- include('partials/bottom') %>

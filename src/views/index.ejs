@@ -18,6 +18,13 @@
 		</div>
 	</div>
 	</form>
+	<% if (locals.directory) { %>
+		<div class="row text-center small mt-2">
+			<div class="col-12 col-md-6 offset-md-3">
+				<a class='custom-link-unstyled' href='<%= base %>directory/'>Directory</a>
+			</div>
+		</div>
+	<% } %>
 </div>
 <script>document.getElementById('credID').focus();</script>
 <%- include('partials/bottom') %>

@@ -98,7 +98,22 @@ router.route([
 router.route('/')
 .get((req, res) => {
 	return res.status(statusCode.OK).render('index', {
-		base: BASE_ROUTE
+		base: BASE_ROUTE,
+		directory: true
+	});
+});
+
+router.route('/directory')
+.get((req, res) => {
+	return res.status(statusCode.OK).render('directory', {
+		base: BASE_ROUTE,
+		title: 'Directory',
+		certificates: [
+			'sample',
+			'sample',
+			'sample',
+			'sample'
+		]
 	});
 });
 
