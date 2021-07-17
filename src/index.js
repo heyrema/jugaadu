@@ -398,7 +398,6 @@ Usage: jrema <options>`)
 
 			// Minification
 			if (!args['no-minify']) {
-				console.log(args)
 				console.log(`Minifying the code to reduce size... 🔥`);
 				const matches = await glob(`${buildDir}**${path.sep}*`, { nodir: true });
 				for (const file of matches) {
@@ -420,6 +419,9 @@ Usage: jrema <options>`)
 				const depPath = path.dirname(resolvePkgPath(dep, __dirname));
 				fs.copySync(depPath, path.join(buildDir, 'modules', dep));
 			}
+
+			// Add .nojekyll
+			fs.writeFileSync(path.join(buildDir, '.nojekyll'), '');
 		}
 
 		gracefulExit(0);
