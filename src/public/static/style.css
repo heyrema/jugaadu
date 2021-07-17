@@ -90,6 +90,11 @@ body {
 	color: inherit;
 }
 
+.cred-id {
+	user-select: all;
+	font-family: monospace;
+}
+
 footer {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: small;

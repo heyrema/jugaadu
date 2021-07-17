@@ -97,6 +97,15 @@ $(async function() {
 			})(`${msg}, ${pageURL}`)
 		});
 	}
+
+	$('.cred-id').on('click', () => {
+		document.execCommand('copy');
+		window.getSelection().removeAllRanges();
+		window.toast(`Copied to clipboard!`, {
+			toastClass: 'bg-toast float-right',
+			duration: 1000
+		});
+	}).attr('title', 'Click to copy');
 });
 
 const downloadCert = async type => {
