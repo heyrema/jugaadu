@@ -9,11 +9,20 @@
 						<th scope="col">Credential ID</th>
 					</tr>
 				</thead>
+				<%
+					if (locals.certificates && typeof locals.certificates[0] === 'string')
+						locals.certs = locals.certificates.map(c => ({
+							title: c,
+							uid: c
+						}));
+					else
+						locals.certs = locals.certificates;
+				%>
 				<tbody>
-					<% for (const cert of locals.certificates ?? []) { %>
+					<% for (const cert of locals.certs ?? []) { %>
 					<tr>
-						<td title='<%= cert %>'>
-							<a class='cred-entry' href='<%= base %>certificate/<%= cert %>'><%= cert %></a>
+						<td title='<%= cert.uid %>'>
+							<a target='_blank' class='cred-entry' href='<%= base %>certificate/<%= cert.uid %>'><%= cert.title %></a>
 						</td>
 					</tr>
 					<% } %>
