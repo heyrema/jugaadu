@@ -11,6 +11,7 @@ const {
 	MAX_CAIRO_DIMENSION,
 	SINGLE_WHITE_PIXEL
 } = require('../constants');
+const { resolveItemPath } = require('./resolution');
 
 if (!process.env.FONTS_LOADED) {
 	const RESOURCES = path.join(INTERNAL_STATIC_DIR, 'items.json');
@@ -89,7 +90,7 @@ const render = async (cert, fmt) => {
 	}
 
 	try {
-		const bgImg = await loadImage(path.join(INTERNAL_STATIC_DIR, cert.background));
+		const bgImg = await loadImage(resolveItemPath(cert.background));
 		ctx.drawImage(bgImg, 0, 0, width, height);
 	} catch(e) {}
 
@@ -134,7 +135,7 @@ const render = async (cert, fmt) => {
 				value = SINGLE_WHITE_PIXEL;
 			}
 
-			const toLoad = value.startsWith('data:') ? value : path.join(INTERNAL_STATIC_DIR, value);
+			const toLoad = value.startsWith('data:') ? value : resolveItemPath(value);
 			const imgToDraw = await loadImage(toLoad);
 			ctx.drawImage(imgToDraw, x, y, width, height);
 		} else {
@@ -260,7 +261,7 @@ const render = async (cert, fmt) => {
 }
 
 // Render a preview of a template
-const previewTemplate = async (template, fmt) => {
+const previewTemplate = async (template, fmt = 'png') => {
 	const format = fmt?.toLowerCase() === 'pdf' ? 'pdf' : 'png';
 
 	const date = template?.date ?? new Date(Date.now()).toISOString();
@@ -272,10 +273,52 @@ const previewTemplate = async (template, fmt) => {
 		uid: 'Sample UID'
 	};
 
-	return render(t, format);
+	return await render(t, format);
+};
+
+// Render a certificate
+const renderCertificate = async (certificate, template, fmt = 'png') => {
+	const { uid } = certificate;
+	const format = fmt?.toLowerCase() === 'pdf' ? 'pdf' : 'png';
+	if (certificate == null)
+		throw new Error(`Certificate not provided!`);
+	
+	if (template == null)
+		throw new Error(`Template not provided!`);
+
+	let renderObj = {
+		...JSON.parse(JSON.stringify(template))
+	};
+
+	renderObj.date = certificate.date;
+	renderObj.templateDate = template.date;
+
+	renderObj.title = certificate.title;
+	renderObj.templateTitle = template.title;
+
+	renderObj.uid = certificate.uid;
+
+	const providedValues = certificate.values.map(v => v.name);
+
+	for (let f of renderObj.fields) {
+		if (providedValues.indexOf(f.name) < 0) {
+			if (f.defaultValue == null && f.value == null)
+				f.skip = true;
+			continue;
+		}
+
+		const v = certificate.values.filter(v => v.name === f.name)[0];
+		f.value = v.value;
+
+		if (!v.visible)
+			f.skip = true;
+	}
+
+	return await render(renderObj, format);
 };
 
 module.exports = {
 	render,
-	previewTemplate
+	previewTemplate,
+	renderCertificate
 };

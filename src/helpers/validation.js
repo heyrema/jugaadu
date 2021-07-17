@@ -110,6 +110,114 @@ const validateTemplate = async body => {
 	}
 };
 
+const validateCertificate = async (body, template) => {
+	const { values } = body;
+
+	if (values.filter(v => v?.value == null && v?.visible !== false).length > 0)
+		throw new Error(`Empty values not allowed!`);
+
+	if (template == null)
+		throw new Error(`Template not found!`);
+
+	const validValues = [];
+
+	for (const field of template.fields) {
+		const {
+			name,
+			type,
+			defaultValue,
+			required,
+			fixed,
+		} = field;
+
+		const matches = values.filter(v => v.name === name);
+		if (matches.length > 1)
+			throw new Error(`Duplicate values for the field '${name}' received!`);
+
+		const newField = matches[0];
+
+		let visible = true;
+		if ('visible' in (newField ?? {}))
+			visible = newField.visible;
+
+		if (newField?.visible === false)
+			newField.value = getDefaultValue[type];
+
+		if (field.placeholder) {
+			if (visible !== false)
+				continue;
+				
+			newField.value = field.value;
+			validValues.push({ ...newField });
+			continue;
+		}
+
+		// Check if required and missing
+		if (
+			(newField == null || newField.value == null)
+			&& required
+			&& defaultValue == null
+		)
+			throw new Error(`Received no value for field '${name}'!`);
+			
+		if (newField == null || fixed)
+			continue;
+		
+		let { value: newValue } = newField ?? {};
+		
+		switch (type) {
+			case 'Number': {
+				if (typeof newValue !== 'number')
+					throw new Error(`Only numbers accepted for '${name}'!`);
+			}
+			break;
+			case 'String': {
+				if (typeof newValue !== 'string')
+					throw new Error(`Only strings accepted for '${name}'!`);
+			}
+			break;
+			case 'Boolean': {
+				if (typeof newValue !== 'boolean')
+					throw new Error(`Only booleans accepted for '${name}'!`);
+			}
+			break;
+			case 'Date': {
+				if (newValue === 'now')
+					newValue = new Date(Date.now());
+				try {
+					new Date(Date.parse(newValue)).toISOString();
+				} catch(e) {
+					throw new Error(`Invalid value for field '${name}': Invalid date! Use the UTC/ISO format.`);
+				}
+			}
+			break;
+			case 'Image': {
+				if (newValue != null && !await validateImage(newValue))
+					throw new Error(`Invalid value for field '${name}': Image not found!`);
+				
+				if (newValue != null) {
+					const imgLocation = await getImageLocation(newValue);
+					if (!imgLocation)
+						throw new Error(`Invalid value for field '${name}': Image not accessible!`);
+					
+					newValue = imgLocation;
+				}
+			}
+			break;
+		}
+
+		validValues.push({
+			name,
+			value: newValue,
+			visible
+		});
+	}
+
+	body.values = validValues;
+	return body;
+};
+
 module.exports = {
-	validateTemplate
+	validateTemplate,
+	validateCertificate
 };

@@ -4,6 +4,9 @@ const fs = require('fs-extra');
 const { INTERNAL_STATIC_DIR } = require('../constants');
 
 const resolveItemPath = (src, cwd = false) => {
+	if (/^(https?\:\/\/|data\:)/.test(src))
+		return true;
+
 	const { STATIC_DIR, TMP_STATIC_DIR } = process.env;
 
 	let DIRS = [

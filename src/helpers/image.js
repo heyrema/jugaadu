@@ -8,17 +8,9 @@ const {
 } = require('mime-types');
 
 const {
-	INTERNAL_STATIC_DIR,
-	TMP_STATIC_DIR,
-	STATIC_DIR
+	INTERNAL_STATIC_DIR
 } = require('../constants');
 const { resolveItemPath } = require('./resolution');
-
-const DIRS = [
-	STATIC_DIR,
-	INTERNAL_STATIC_DIR,
-	TMP_STATIC_DIR
-];
 
 // Test if image is valid
 const validateImage = async src => {
@@ -29,6 +21,8 @@ const validateImage = async src => {
 
 // Retrieve absolute path if local
 const getImageLocation = async src => {
+	const { STATIC_DIR, TMP_STATIC_DIR } = process.env;
+
 	if (validateImage(src)) {
 		if (!/^(https?\:\/\/|data\:)/.test(src))
 			return src;
