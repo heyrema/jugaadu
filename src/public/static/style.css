@@ -60,6 +60,10 @@ body {
 	background-color: rgb(51, 51, 51) !important;
 }
 
+.btn-whatsapp {
+	background-color: #25D366;
+}
+
 #credList {
 	color: rgb(184, 184, 184);
 	background-color: rgb(63, 63, 63) !important;

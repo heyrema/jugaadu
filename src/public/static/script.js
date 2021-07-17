@@ -87,6 +87,15 @@ $(async function() {
 				return linkedURL;
 			})(pageURL, certificate.title, 'Rema by Param Siddharth')
 		});
+		$('#whatsapp').attr({
+			href: (text => {
+				const waURL = new URL('https://wa.me');
+				waURL.search = new URLSearchParams({
+					text
+				});
+				return waURL;
+			})(`${msg}, ${pageURL}`)
+		});
 	}
 });
 
