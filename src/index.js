@@ -7,6 +7,9 @@ const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const resolvePkgPath = require('resolve-package-path');
 const chalk = require('chalk');
+const { promisify } = require('util');
+const glob_ = require('glob');
+const glob = promisify(glob_.glob);
 const tmp = require('tmp');
 const { v4: uuid } = require('uuid');
 const arrToCSV = require('objects-to-csv');
@@ -52,6 +55,7 @@ const {
 const { resolveItemPath } = require('./helpers/resolution');
 const { previewTemplate, renderCertificate } = require('./helpers/render');
 const { convertTo } = require('./helpers/types');
+const { minify } = require('./helpers/minification');
 const deps = require('./deps');
 
 if (require.main === module) {
@@ -63,6 +67,9 @@ if (require.main === module) {
 Generates a deployable Jugaadu static build of Rema.
 
 Usage: jrema <options>`)
+		.parserConfiguration({
+			'boolean-negation': false
+		})
 		.option('b', {
 			alias: 'base-route',
 			desc: 'The route on which the build will be mounted.',
@@ -104,8 +111,12 @@ Usage: jrema <options>`)
 			desc: 'The output build directory.',
 			default: 'build'
 		})
+		.option('no-minify', {
+			desc: 'Turn minification off.',
+			boolean: true
+		})
 		.option('preview', {
-			desc: 'Previews the template.',
+			desc: 'Generates a preview of the template.',
 			boolean: true
 		})
 		.argv;
@@ -384,6 +395,24 @@ Usage: jrema <options>`)
 			// Copy static files
 			console.log(`Copying style and script files... 💞`);
 			fs.copySync(path.join(__dirname, 'public'), buildDir);
+
+			// Minification
+			if (!args['no-minify']) {
+				console.log(args)
+				console.log(`Minifying the code to reduce size... 🔥`);
+				const matches = await glob(`${buildDir}**${path.sep}*`, { nodir: true });
+				for (const file of matches) {
+					const ext = path.extname(file);
+					if ([
+						'.html',
+						'.css',
+						'.js'
+					].indexOf(ext) >= 0) {
+						const minified = await minify(file);
+						fs.writeFileSync(file, minified);
+					}
+				}
+			}
 
 			// Copy modules
 			console.log(`Copying modules... 📜`);
