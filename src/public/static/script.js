@@ -96,6 +96,17 @@ $(async function() {
 				return waURL;
 			})(`${msg}, ${pageURL}`)
 		});
+		$('#copyLink').on('click', () => {
+			const el = $('<input>');
+			$('body').append(el);
+			el.val(pageURL).select();
+			document.execCommand('copy');
+			window.toast(`Copied to clipboard!`, {
+				toastClass: 'bg-toast float-right',
+				duration: 1500
+			});
+			el.remove();
+		});
 	}
 
 	$('.cred-id').on('click', () => {
@@ -103,7 +114,7 @@ $(async function() {
 		window.getSelection().removeAllRanges();
 		window.toast(`Copied to clipboard!`, {
 			toastClass: 'bg-toast float-right',
-			duration: 1000
+			duration: 1500
 		});
 	}).attr('title', 'Click to copy');
 });
