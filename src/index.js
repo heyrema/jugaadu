@@ -365,15 +365,16 @@ Usage: jrema <options>`)
 				}
 			];
 
-			if (args.d !== 'absent')
+			if (args.d !== 'absent') {
 				files.push({
 					location: 'directory/index.html',
 					template: 'directory',
 					params: {
 						base: baseRoute,
-						certificates: certList.filter(c => c?.error == null).map(c => c.uid)
+						certificates: certList.filter(c => c?.error == null).map(c => c.uid).map((_, i, t) => t[t.length - 1 - i])
 					}
 				});
+			}
 
 			for (const file of files) {
 				const html = await ejs.renderFile(path.join(__dirname, `views/${file.template}.ejs`), file.params);
