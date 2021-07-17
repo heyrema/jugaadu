@@ -11,7 +11,7 @@
 				<div id='certificate' class="d-block m-auto"
 					data-width="<%= info.dimensions.x %>"
 					data-height="<%= info.dimensions.y %>"
-					data-src="<%= base %>certificate/<%= uid %>/certificate"
+					data-src="<%= base %><%= download %>"
 					data-title="<%= locals?.info?.title ?? "Certificate" %>"
 				></div>
 			</div>
@@ -32,13 +32,13 @@
 				</a>
 			</div>
 			<div class='col-12 col-md-6 offset-md-3'>
-				<a download="certificate.png" href='<%= base %>certificate/<%= uid %>/certificate.png' onclick='downloadCert("PNG");' class='btn btn-success'>
+				<a download="<%= locals.filename ?? 'credential' %>.png" href='<%= base %><%= download %>.png' onclick='downloadCert("PNG");' class='btn btn-success'>
 					<i class='fa fa-arrow-down'></i> PNG
 				</a>
-				<a download="certificate.pdf" href='<%= base %>certificate/<%= uid %>/certificate.pdf' onclick='downloadCert("PDF");' class='btn btn-primary'>
+				<a download="<%= locals.filename ?? 'credential' %>.pdf" href='<%= base %><%= download %>.pdf' onclick='downloadCert("PDF");' class='btn btn-primary'>
 					<i class='fa fa-arrow-down'></i> PDF
 				</a>
 			</div>
 		</div>
 	</div>
-<%- include('partials/bottom') %>
+<%- include('partials/bottom', { uid: locals.uid }) %>

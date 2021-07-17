@@ -2,3 +2,4 @@ build/*
 *.csv
 !build/certificate/
 dist/
+static/

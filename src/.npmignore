@@ -1,0 +1,6 @@
+server.js
+build/
+*.csv
+dist/
+static/
+.env

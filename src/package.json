@@ -1,6 +1,6 @@
 {
 	"name": "rema-jugaadu",
-	"version": "1.0.0",
+	"version": "1.0.0-alpha",
 	"description": "A hacked powerful certificate generation and management system.",
 	"main": "index.js",
 	"scripts": {
@@ -45,12 +45,23 @@
 		"axios": "^0.21.1",
 		"bootstrap": "^5.0.2",
 		"bootstrap-social": "^5.1.1",
+		"canvas": "^2.8.0",
+		"chalk": "^3.0.0",
+		"cli-table": "^0.3.6",
 		"css-spinners": "^1.0.1",
+		"death": "^1.1.0",
 		"ejs": "^3.1.6",
 		"font-awesome": "^4.7.0",
 		"fs-extra": "^10.0.0",
 		"jquery": "^3.6.0",
 		"json5": "^2.2.0",
-		"toast-me": "^1.3.5"
+		"nanoid": "^3.1.23",
+		"pretty-error": "^3.0.4",
+		"resolve-package-path": "^4.0.1",
+		"strftime": "^0.10.0",
+		"tmp": "^0.2.1",
+		"toast-me": "^1.3.5",
+		"unzipper": "^0.10.11",
+		"yargs": "^16.2.0"
 	}
 }

@@ -84,7 +84,9 @@ router.route([
 		const info = await fs.readJSON(path.join(DIR_IN_FOCUS, 'certificate.json'));
 		return res.status(statusCode.OK).render('certificate', {
 			info, uid,
-			base: BASE_ROUTE
+			download: `certificate/${uid}/certificate`,
+			base: BASE_ROUTE,
+			filename: 'certificate'
 		});
 	} catch(e) {
 		console.log(e.message);
