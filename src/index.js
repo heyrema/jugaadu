@@ -9,6 +9,7 @@ const resolvePkgPath = require('resolve-package-path');
 const chalk = require('chalk');
 const tmp = require('tmp');
 const { v4: uuid } = require('uuid');
+const arrToCSV = require('objects-to-csv');
 const PrettyError = require('pretty-error');
 const ON_DEATH = require('death')({
 	uncaughtException: true
@@ -67,6 +68,11 @@ Usage: jrema`)
 			desc: 'A CSV file containing all records.',
 			default: 'records.csv',
 		})
+		.option('k', {
+			alias: 'output',
+			desc: 'The CSV file to be generated with updated records.',
+			default: 'output.csv',
+		})
 		.option('t', {
 			alias: 'template',
 			desc: 'The exported Rema template file.',
@@ -96,7 +102,8 @@ Usage: jrema`)
 	const listPath = path.resolve(args.l);
 	const staticDir = path.resolve(args.s) + path.sep;
 	const buildDir = path.resolve(args.o) + path.sep;
-	const baseRoute = args.b;
+	const outputCsv = path.resolve(args.k);
+	const baseRoute = args.b.endsWith('/') ? args.b : (args.b + '/');
 	
 	process.env.STATIC_DIR = staticDir;
 	process.env.TMP_STATIC_DIR = path.join(process.env.TMP_DIR, 'static') + path.sep;
@@ -235,6 +242,8 @@ Usage: jrema`)
 			}
 		}
 
+		let responseCSV = [];
+
 		if (args.preview) {
 			try {
 				console.log(`Generating preview... 👣`);
@@ -267,6 +276,14 @@ Usage: jrema`)
 		if (fs.existsSync(listPath)) {
 			let i = 1;
 			for (const item of certList) {
+				if (item.error) {
+					responseCSV.push({
+						...item,
+						uid: 'FAILED'
+					});
+					continue;
+				}
+
 				console.log(`Rendering certificate #${i} of ${certList.length}...`);
 				try {
 					const certDir = path.join(buildDir, 'certificate', item.uid);
@@ -288,14 +305,57 @@ Usage: jrema`)
 						filename: 'certificate'
 					});
 					fs.outputFileSync(path.join(certDir, 'index.html'), html);
+					responseCSV.push(item);
 				} catch(e) {
 					console.error(`Failed to render certificate #${i} (${e.message})!`);
+					responseCSV.push({
+						...item,
+						uid: 'FAILED'
+					});
 				}
 				i++;
+			}
+
+			try {
+				console.log(`Exporting updated records... 🌿`);
+				const output = new arrToCSV(responseCSV.map(o => {
+					const no = { ...o };
+					delete no.values;
+					for (const value of o.values) {
+						no[value.name] = value.value;
+						if (!value.visible)
+							no[value.name + '_VISIBLE'] = false;
+					}
+					return no;
+				}));
+				await output.toDisk(outputCsv);
+			} catch(e) {
+				console.error(`Failed to save the output list to '${args.k}' (${e.message})!`);
 			}
 		}
 
 		{
+			for (const file of [
+				{
+					location: 'index.html',
+					template: 'index',
+					params: {
+						base: baseRoute
+					}
+				},
+				{
+					location: '404.html',
+					template: '404',
+					params: {
+						base: baseRoute,
+						title: `Not Found`
+					}
+				}
+			]) {
+				const html = await ejs.renderFile(path.join(__dirname, `views/${file.template}.ejs`), file.params);
+				fs.outputFileSync(path.join(buildDir, file.location), html);
+			}
+
 			// Copy static files
 			console.log(`Copying style and script files... 💞`);
 			fs.copySync(path.join(__dirname, 'public'), buildDir);
