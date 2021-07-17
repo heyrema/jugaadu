@@ -1,6 +1,6 @@
 {
 	"name": "rema-jugaadu",
-	"version": "1.0.0-alpha",
+	"version": "2.0.0-beta",
 	"description": "A hacked powerful certificate generation and management system.",
 	"main": "index.js",
 	"scripts": {
