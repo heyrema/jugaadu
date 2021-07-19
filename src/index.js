@@ -149,7 +149,7 @@ Usage: jrema <options>`)
 			try {
 				fs.ensureDirSync(buildDir);
 			} catch(e) {
-				console.error(`Failed to ensure build directory '${args.t}'!`);
+				console.error(`Failed to ensure build directory '${args.o}'!`);
 				gracefulExit(1);
 			}
 		}
@@ -234,6 +234,11 @@ Usage: jrema <options>`)
 									date: new Date(Date.now()).toISOString()
 								};
 								
+								certObj.values = certObj.values.map(v => ({
+									...v,
+									name: v.name.trim()
+								}));
+
 								try {
 									await validateCertificate(certObj, template);
 								} catch(e) {
