@@ -6,6 +6,9 @@ const options = {
 	html: {
 		removeAttributeQuotes: false,
 		removeOptionalTags: false,
+		collapseWhitespace: true,
+		collapseInlineTagWhitespace: false,
+		conservativeCollapse: true
 	},
 	img: {
 		maxSize: 0
