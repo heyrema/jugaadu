@@ -194,13 +194,14 @@ Usage: jrema <options>`)
 								});
 				
 								let preserve = {};
-				
-								[
+								const placs = [
 									{
 										plac: 'TITLE',
 										prop: 'title'
 									}
-								].forEach(({ plac, prop }) => {
+								];
+				
+								placs.forEach(({ plac, prop }) => {
 									if (plac in item) {
 										if (item[plac] !== '')
 											preserve[prop] = item[plac];
@@ -243,13 +244,32 @@ Usage: jrema <options>`)
 									await validateCertificate(certObj, template);
 								} catch(e) {
 									console.error(e.message);
+									certs.push({
+										...certObj,
+										error: e.message
+									});
+									continue;
 								}
-								
+
+								const valueKeys = certObj.values.map(v => v.name);
+								const keysToRetain = Object.keys(item).filter(k => [
+									...placs.map(p => p.plac)
+								].indexOf(k) < 0 && valueKeys.indexOf(k) < 0);
+				
+								const retained = keysToRetain.map(k => ({
+									name: k,
+									value: item[k] === '' || item[k] == null ? null : item[k]
+								}));
+
 								try{
-									certList.push(JSON.parse(JSON.stringify(certObj)))
+									certList.push({
+										...JSON.parse(JSON.stringify(certObj)),
+										retained
+									});
 								} catch(e) {
 									certList.push({
 										...certObj,
+										retained,
 										error: e.message
 									});
 								}
@@ -348,11 +368,14 @@ Usage: jrema <options>`)
 				const output = new arrToCSV(responseCSV.map(o => {
 					const no = { ...o };
 					delete no.values;
+					delete no.retained;
 					for (const value of o.values) {
 						no[value.name] = value.value;
 						if (!value.visible)
 							no[value.name + '_VISIBLE'] = false;
 					}
+					for (const ret of o.retained)
+						no[ret.name + '_RETAINED'] = ret.value;
 					return no;
 				}));
 				await output.toDisk(outputCsv);
