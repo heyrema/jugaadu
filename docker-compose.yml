@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  rema:
+    image: jrema
+    build: ./src
+    volumes:
+      - rema-static:/home/node/app/static
+
+volumes:
+  rema-static:
