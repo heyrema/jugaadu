@@ -12,6 +12,7 @@ const {
 	SINGLE_WHITE_PIXEL
 } = require('../constants');
 const { resolveItemPath } = require('./resolution');
+const qr = require('./qr');
 
 // Load fonts
 const loadFonts = () => {
@@ -60,6 +61,9 @@ const render = async (cert, fmt) => {
 				else if (field.image != null) {
 					field.image.size.x *= conversion;
 					field.image.size.y *= conversion;
+				} else if (field.qr != null) {
+					field.qr.size.x *= conversion;
+					field.qr.size.y *= conversion;
 				}
 			}
 		} else {
@@ -77,6 +81,9 @@ const render = async (cert, fmt) => {
 				else if (field.image != null) {
 					field.image.size.x *= conversion;
 					field.image.size.y *= conversion;
+				} else if (field.qr != null) {
+					field.qr.size.x *= conversion;
+					field.qr.size.y *= conversion;
 				}
 			}
 		}
@@ -144,6 +151,19 @@ const render = async (cert, fmt) => {
 
 			const toLoad = value.startsWith('data:') ? value : resolveItemPath(value);
 			const imgToDraw = await loadImage(toLoad);
+			ctx.drawImage(imgToDraw, x, y, width, height);
+		} else if (field.type === 'QR') {
+			let {
+				size: {
+					x: width,
+					y: height
+				},
+				margin
+			} = field.qr;
+
+			let value = field.value ?? field.defaultValue ?? 'empty';
+
+			const imgToDraw = await qr.render(value, Math.max(width, height), margin);
 			ctx.drawImage(imgToDraw, x, y, width, height);
 		} else {
 			let {

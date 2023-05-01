@@ -26,8 +26,8 @@ const validateTemplate = async body => {
 		if (field.type == null)
 			field.type = 'String';
 
-		if (['Number', 'Boolean', 'String', 'Image', 'Date'].indexOf(field.type) < 0)
-			throw new Error(`Invalid type for field '${field.name}': Only Number, Boolean, String, Image, and Date allowed.`);
+		if (['Number', 'Boolean', 'String', 'Image', 'Date', 'QR'].indexOf(field.type) < 0)
+			throw new Error(`Invalid type for field '${field.name}': Only Number, Boolean, String, Image, Date, and QR allowed.`);
 		
 		if (['TITLE', 'template', 'uid', '_id'].indexOf(field.name) >= 0)
 			throw new Error(`Invalid name for field '${field.name}': Name not allowed for fields.`);
@@ -67,6 +67,9 @@ const validateTemplate = async body => {
 				
 				field.defaultValue = imgLocation;
 			}
+		} else if (field.type === 'QR') {
+			if (field.qr == null)
+				throw new Error(`Invalid value for field '${field.name}': An expected size must be defined.`);
 		} else {
 			if (field.textFormat == null)
 				field.textFormat = {};
@@ -202,6 +205,11 @@ const validateCertificate = async (body, template) => {
 					
 					newValue = imgLocation;
 				}
+			}
+			break;
+			case 'QR': {
+				if (typeof newValue !== 'string')
+					throw new Error(`Only strings accepted for '${name}'!`);
 			}
 			break;
 		}
