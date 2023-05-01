@@ -61,6 +61,9 @@ const render = async (cert, fmt) => {
 				else if (field.image != null) {
 					field.image.size.x *= conversion;
 					field.image.size.y *= conversion;
+				} else if (field.qr != null) {
+					field.qr.size.x *= conversion;
+					field.qr.size.y *= conversion;
 				}
 			}
 		} else {
@@ -78,6 +81,9 @@ const render = async (cert, fmt) => {
 				else if (field.image != null) {
 					field.image.size.x *= conversion;
 					field.image.size.y *= conversion;
+				} else if (field.qr != null) {
+					field.qr.size.x *= conversion;
+					field.qr.size.y *= conversion;
 				}
 			}
 		}
