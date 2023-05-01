@@ -12,6 +12,7 @@ const {
 	SINGLE_WHITE_PIXEL
 } = require('../constants');
 const { resolveItemPath } = require('./resolution');
+const qr = require('./qr');
 
 // Load fonts
 const loadFonts = () => {
@@ -144,6 +145,19 @@ const render = async (cert, fmt) => {
 
 			const toLoad = value.startsWith('data:') ? value : resolveItemPath(value);
 			const imgToDraw = await loadImage(toLoad);
+			ctx.drawImage(imgToDraw, x, y, width, height);
+		} else if (field.type === 'QR') {
+			let {
+				size: {
+					x: width,
+					y: height
+				},
+				margin
+			} = field.qr;
+
+			let value = field.value ?? field.defaultValue ?? 'empty';
+
+			const imgToDraw = await qr.render(value, Math.max(width, height), margin);
 			ctx.drawImage(imgToDraw, x, y, width, height);
 		} else {
 			let {
