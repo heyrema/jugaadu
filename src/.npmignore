@@ -4,3 +4,5 @@ build/
 dist/
 static/
 .env
+.DS_Store
+Thumbs.db

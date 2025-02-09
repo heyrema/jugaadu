@@ -1,11 +1,18 @@
 version: '3.9'
 
 services:
-  rema:
+  jrema:
     image: jrema
+    platform: linux/amd64
     build: ./src
     volumes:
       - rema-static:/home/node/app/static
+  
+  jrema-dev:
+    image: jrema
+    platform: linux/amd64
+    build:
+      dockerfile: devcontainer.Dockerfile
 
 volumes:
   rema-static:
