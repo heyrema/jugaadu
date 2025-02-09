@@ -121,7 +121,7 @@ router.use(`/modules`, express.static(path.join(__dirname, 'node_modules')));
 router.use(`/`, express.static(path.join(__dirname, 'public')));
 router.use(`/`, express.static(path.join(__dirname, 'build')));
 
-router.route('*')
+router.route('')
 .all((req, res) => res.status(statusCode.NOT_FOUND).render('404', { base: BASE_ROUTE }));
 
 app.use(BASE_ROUTE, router);
