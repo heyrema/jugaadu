@@ -1,6 +1,5 @@
 const path = require('path');
 const fs = require('fs-extra');
-const minify = require('minify');
 
 const options = {
 	html: {
@@ -17,6 +16,7 @@ const options = {
 
 const minifyFile = async file => {
 	const type = path.extname(file);
+	const { minify } = await import('minify');
 
 	if (!fs.existsSync(file))
 		throw new Error(`File not found: ${file}`);

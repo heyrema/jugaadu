@@ -1,7 +1,6 @@
 const path = require('path');
 const fs = require('fs-extra');
 const axios = require('axios').default;
-const { nanoid } = require('nanoid');
 const {
 	extension: mimeExt,
 	lookup: mimeType
@@ -22,6 +21,7 @@ const validateImage = async src => {
 // Retrieve absolute path if local
 const getImageLocation = async src => {
 	const { STATIC_DIR, TMP_STATIC_DIR } = process.env;
+	const { nanoid } = await import('nanoid');
 
 	if (validateImage(src)) {
 		if (!/^(https?\:\/\/|data\:)/.test(src))
