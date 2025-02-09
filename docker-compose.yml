@@ -13,6 +13,13 @@ services:
     platform: linux/amd64
     build:
       dockerfile: devcontainer.Dockerfile
+    ports:
+      - '8080:8080'
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/home/ubuntu/app
+      - rema-static:/home/ubuntu/static
 
 volumes:
   rema-static:
