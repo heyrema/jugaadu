@@ -24,10 +24,35 @@ See the [wiki](../../wiki) for instructions on setup and development.
 
 For other discussions, see the [discussions](../../discussions) page.
 
+## Development (Docker)
+Build the Docker image using Docker Compose.
+```bash
+docker compose build jrema-dev
+```
+
+Start the container in the working directory.
+```bash
+docker run \
+	--rm \
+	-it \
+	--name jrema-dev \
+	-v $(pwd):/home/ubuntu/app \
+	jrema-dev
+```
+
+Install the dependencies and link the package.
+```bash
+cd /home/ubuntu/app/src
+npm ci
+npm link
+```
+
+Use `jrema` within the container as the CLI.
+
 ## Execution (Docker)
 Build the Docker image using Docker Compose.
 ```bash
-docker compose build
+docker compose build jrema
 ```
 
 Start using Jugaadu Rema's CLI anywhere using Docker bind mounts for working and accessible directories.
