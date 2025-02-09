@@ -32,12 +32,14 @@ docker compose build jrema-dev
 
 Start the container in the working directory.
 ```bash
-docker run \
-	--rm \
-	-it \
-	--name jrema-dev \
-	-v $(pwd):/home/ubuntu/app \
-	jrema-dev
+docker compose up -d jrema-dev
+```
+
+Attach to the container.
+```bash
+# The container might have a name
+# different from what's mentioned below.
+docker attach jugaadu-jrema-dev-1
 ```
 
 Install the dependencies and link the package.
