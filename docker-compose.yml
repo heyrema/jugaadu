@@ -9,7 +9,7 @@ services:
       - rema-static:/home/node/app/static
   
   jrema-dev:
-    image: jrema
+    image: jrema-dev
     platform: linux/amd64
     build:
       dockerfile: devcontainer.Dockerfile
